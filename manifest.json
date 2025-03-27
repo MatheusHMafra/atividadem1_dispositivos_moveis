@@ -1,0 +1,19 @@
+{
+    "name": "Anotações Protegidas",
+    "short_name": "Anotações",
+    "description": "Aplicativo de anotações protegidas com autenticação segura",
+    "lang": "pt-BR",
+    "start_url": "/index.html",
+    "display": "standalone",
+    "background_color": "#D0D0D0",
+    "theme_color": "#2f2f2f",
+    "orientation": "any",
+    "icons": [
+        {
+            "src": "image/icon.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "any maskable"
+        }
+    ]
+}
