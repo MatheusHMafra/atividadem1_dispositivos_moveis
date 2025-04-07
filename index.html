@@ -4,106 +4,86 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Anotações Protegidas</title>
 
     <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#D0D0D0">
+    <meta name="theme-color" content="#4361ee">
     <link rel="icon" href="image/icon.png" type="image/png">
+    <link rel="apple-touch-icon" href="image/icon.png">
     <link rel="stylesheet" href="css/style.css">
-    <style>
-        :root {
-            --primary-color: #D0D0D0;
-            --secondary-color: #2f2f2f;
-        }
-
-        :root-dark {
-            --primary-color: #2f2f2f;
-            --secondary-color: #D0D0D0;
-        }
-
-        body {
-            background-color: var(--primary-color);
-            color: var(--secondary-color);
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
-        }
-
-        header {
-            width: 100%;
-            background-color: var(--secondary-color);
-            color: var(--primary-color);
-            padding: 1rem;
-            text-align: center;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-
-        main {
-            width: 100%;
-            max-width: 800px;
-            padding: 1rem;
-            flex: 1;
-        }
-
-        footer {
-            width: 100%;
-            padding: 1rem;
-            text-align: center;
-            font-size: 0.8rem;
-            background-color: var(--secondary-color);
-            color: var(--primary-color);
-        }
-
-        .hidden {
-            display: none !important;
-        }
-    </style>
+    <meta name="description" content="Aplicativo de anotações protegidas com autenticação biométrica, funcionamento offline e compartilhamento fácil">
+    
+    <!-- Preconectar para otimização -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    
+    <!-- Open Graph para melhor compartilhamento -->
+    <meta property="og:title" content="Anotações Protegidas">
+    <meta property="og:description" content="Aplicativo web para anotações com proteção biométrica">
+    <meta property="og:image" content="image/icon.png">
+    <meta property="og:url" content="https://anotacoes-protegidas.web.app">
+    <meta property="og:type" content="website">
 </head>
 
 <body>
     <header>
-        <h1>Anotações Protegidas</h1>
+        <h1>✏️ Anotações Protegidas</h1>
+        <button id="logout-btn" class="hidden" aria-label="Sair da conta">Sair</button>
     </header>
 
     <main>
         <div id="auth-section">
             <h2>Acesso Seguro</h2>
-            <p>Para acessar suas anotações, autentique-se:</p>
-            <button id="auth-button">Autenticar</button>
-            <p id="auth-status"></p>
+            <p>Para acessar suas anotações, autentique-se usando biometria ou PIN do seu dispositivo:</p>
+            <button id="auth-button">
+                <span>🔐 Autenticar</span>
+            </button>
+            <p id="auth-status" class="status-message hidden" aria-live="polite"></p>
+            
+            <!-- Modo de desenvolvimento -->
+            <div class="dev-options hidden">
+                <hr style="margin: 20px 0; border-color: rgba(128,128,128,0.2); border-style: dashed;">
+                <p><small>Opções de desenvolvimento:</small></p>
+                <button id="bypass-auth">Pular Autenticação</button>
+            </div>
         </div>
 
         <div id="notes-section" class="hidden">
+            <div class="notes-header">
+                <h2>Suas Anotações</h2>
+                <div class="notes-actions"></div>
+            </div>
             <note-editor></note-editor>
             <note-list></note-list>
         </div>
     </main>
 
     <footer>
-        <p>PWA de Anotações Protegidas - 2023</p>
+        <p>PWA de Anotações Protegidas &copy; 2025</p>
     </footer>
 
-    <script src="js/components.js"></script>
-    <script src="js/auth.js"></script>
-    <script src="js/app.js"></script>
-</body>
+    <!-- Scripts -->
+    <script src="js/components.js" defer></script>
+    <script src="js/auth.js" defer></script>
+    <script src="js/app.js" defer></script>
 
-<script>
-    if ('serviceWorker' in navigator) {
-        window.addEventListener('load', function () {
-            navigator.serviceWorker.register('/sw.js')
-                .then(function (registration) {
-                    console.log('Service Worker registrado com sucesso:', registration.scope);
-                })
-                .catch(function (error) {
-                    console.log('Falha ao registrar o Service Worker:', error);
-                });
-        });
-    }
-</script>
-
+    <script>
+        // Registrar service worker
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function () {
+                navigator.serviceWorker.register('/sw.js')
+                    .then(function (registration) {
+                        console.log('Service Worker registrado com sucesso:', registration.scope);
+                    })
+                    .catch(function (error) {
+                        console.log('Falha ao registrar o Service Worker:', error);
+                    });
+            });
+        }
+        
+        // Verificar se estamos em modo de desenvolvimento
+        if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+            document.querySelector('.dev-options').classList.remove('hidden');
+        }
+    </script>
 </html>

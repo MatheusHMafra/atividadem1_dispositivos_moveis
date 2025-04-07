@@ -5,16 +5,39 @@ class AuthManager {
         this.authStatus = document.getElementById('auth-status');
         this.authSection = document.getElementById('auth-section');
         this.notesSection = document.getElementById('notes-section');
+        this.bypassAuthBtn = document.getElementById('bypass-auth');
+        this.logoutBtn = document.getElementById('logout-btn');
         
         this.isAuthenticated = false;
         
         // Verifica se a WebAuthn é suportada
         if (window.PublicKeyCredential) {
             this.authButton.addEventListener('click', () => this.authenticate());
+            
+            // Verificar se o browser suporta o tipo de autenticação
+            PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable()
+                .then(available => {
+                    if (!available) {
+                        this.showStatus('Seu dispositivo não possui autenticador de plataforma (biometria/PIN).', 'warning');
+                    }
+                });
         } else {
-            this.authStatus.textContent = 'WebAuthn não é suportado neste navegador.';
+            this.showStatus('WebAuthn não é suportado neste navegador.', 'error');
             this.authButton.disabled = true;
         }
+
+        // Adicionar botão de bypass para desenvolvimento
+        if (this.bypassAuthBtn) {
+            this.bypassAuthBtn.addEventListener('click', () => {
+                localStorage.setItem('authState', 'authenticated');
+                this.isAuthenticated = true;
+                this.authSection.classList.add('hidden');
+                this.notesSection.classList.remove('hidden');
+            });
+        }
+
+        // Adicionar botão de logout
+        this.logoutBtn?.addEventListener('click', () => this.logout());
 
         // Verifica se já está autenticado
         this.checkAuthentication();
@@ -22,16 +45,50 @@ class AuthManager {
 
     checkAuthentication() {
         const authState = localStorage.getItem('authState');
-        if (authState === 'authenticated') {
+        const authExpiry = localStorage.getItem('authExpiry');
+        const now = new Date();
+
+        if (authState === 'authenticated' && authExpiry && new Date(authExpiry) > now) {
             this.isAuthenticated = true;
             this.authSection.classList.add('hidden');
             this.notesSection.classList.remove('hidden');
+        } else {
+            localStorage.removeItem('authState');
+            localStorage.removeItem('authExpiry');
         }
+    }
+
+    logout() {
+        localStorage.removeItem('authState');
+        localStorage.removeItem('authExpiry');
+        this.isAuthenticated = false;
+        
+        // Animar a transição
+        this.notesSection.style.opacity = '0';
+        this.notesSection.style.transform = 'translateY(-20px)';
+        
+        setTimeout(() => {
+            this.notesSection.classList.add('hidden');
+            this.authSection.classList.remove('hidden');
+            this.authSection.style.opacity = '0';
+            this.authSection.style.transform = 'translateY(20px)';
+            
+            setTimeout(() => {
+                this.authSection.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                this.authSection.style.opacity = '1';
+                this.authSection.style.transform = 'translateY(0)';
+            }, 50);
+            
+            this.logoutBtn?.classList.add('hidden');
+            this.showStatus('Você saiu com sucesso.', 'success');
+        }, 300);
     }
 
     async authenticate() {
         try {
-            this.authStatus.textContent = 'Iniciando autenticação...';
+            this.showStatus('Iniciando autenticação...', 'info');
+            this.authButton.disabled = true;
+            this.authButton.innerHTML = '<span class="loading-spinner"></span> Autenticando...';
             
             // Gerar desafio aleatório
             const challenge = new Uint8Array(32);
@@ -68,18 +125,111 @@ class AuthManager {
                 // Armazenar credencial (em um ambiente real, isso seria feito em um backend)
                 localStorage.setItem('authState', 'authenticated');
                 
-                this.isAuthenticated = true;
-                this.authSection.classList.add('hidden');
-                this.notesSection.classList.remove('hidden');
+                // Definir expiração para 24h
+                const expiry = new Date();
+                expiry.setHours(expiry.getHours() + 24);
+                localStorage.setItem('authExpiry', expiry.toISOString());
                 
-                this.authStatus.textContent = 'Autenticação bem-sucedida!';
+                this.isAuthenticated = true;
+                
+                // Mostrar feedback visual positivo
+                this.authButton.innerHTML = '<span>✅ Autenticado!</span>';
+                this.showStatus('Autenticação bem-sucedida!', 'success');
+                
+                // Transição suave para a seção de notas
+                setTimeout(() => this.switchToNotes(), 1000);
             }
         } catch (error) {
             console.error('Erro de autenticação:', error);
-            this.authStatus.textContent = `Erro de autenticação: ${error.message}`;
+            
+            // Tratar diferentes tipos de erros
+            if (error.name === 'NotAllowedError') {
+                this.showStatus('Autenticação cancelada pelo usuário.', 'warning');
+            } else if (error.name === 'NotSupportedError') {
+                this.showStatus('Este tipo de autenticação não é suportado no seu dispositivo.', 'error');
+            } else if (error.name === 'SecurityError') {
+                this.showStatus('Erro de segurança. Verifique se está usando HTTPS em produção.', 'error');
+            } else {
+                this.showStatus(`Erro de autenticação: ${error.message}`, 'error');
+            }
+            
+            this.authButton.innerHTML = '<span>🔐 Autenticar</span>';
+        } finally {
+            this.authButton.disabled = false;
         }
     }
+    
+    showStatus(message, type) {
+        if (!this.authStatus) return;
+        
+        // Remover classes anteriores e adicionar as novas
+        this.authStatus.className = 'status-message';
+        if (type) {
+            this.authStatus.classList.add(type);
+        }
+        
+        // Adicionar um ícone com base no tipo de mensagem
+        let icon = '';
+        switch (type) {
+            case 'error': icon = '❌ '; break;
+            case 'success': icon = '✅ '; break;
+            case 'warning': icon = '⚠️ '; break;
+            case 'info': icon = 'ℹ️ '; break;
+        }
+        
+        this.authStatus.textContent = icon + message;
+        this.authStatus.classList.remove('hidden');
+        
+        // Animação para chamar atenção
+        this.authStatus.style.animation = 'none';
+        setTimeout(() => {
+            this.authStatus.style.animation = 'fadeIn 0.5s ease-out';
+        }, 10);
+        
+        // Auto-ocultar mensagens de sucesso após 5 segundos
+        if (type === 'success') {
+            setTimeout(() => {
+                this.authStatus.style.animation = 'fadeOut 0.5s ease-out forwards';
+            }, 5000);
+        }
+    }
+
+    switchToNotes() {
+        this.authSection.classList.add('hidden');
+        this.notesSection.classList.remove('hidden');
+    }
 }
+
+// Adicionar estilo para o spinner de carregamento
+const style = document.createElement('style');
+style.textContent = `
+    .loading-spinner {
+        display: inline-block;
+        width: 16px;
+        height: 16px;
+        border: 2px solid rgba(255,255,255,0.3);
+        border-radius: 50%;
+        border-top-color: white;
+        animation: spin 1s linear infinite;
+        margin-right: 8px;
+    }
+    
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+    
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(-10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    
+    @keyframes fadeOut {
+        from { opacity: 1; transform: translateY(0); }
+        to { opacity: 0; transform: translateY(-10px); }
+    }
+`;
+document.head.appendChild(style);
 
 // Inicializar o gerenciador de autenticação quando o DOM estiver pronto
 document.addEventListener('DOMContentLoaded', () => {
