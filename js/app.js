@@ -131,7 +131,7 @@ function loadPage() {
             }
         }
     });
-l
+
     document.querySelectorAll('button').forEach(btn => {
         btn.addEventListener('click', function () {
             this.classList.add('clicked');
