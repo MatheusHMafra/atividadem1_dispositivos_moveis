@@ -1,4 +1,3 @@
-<!-- markdownlint-disable MD029 -->
 # Aplicativo de Anotações Protegidas (PWA)
 
 Uma Aplicação Web Progressiva (PWA) para criar, armazenar e compartilhar anotações de forma segura, com autenticação biométrica.
@@ -22,47 +21,6 @@ Uma Aplicação Web Progressiva (PWA) para criar, armazenar e compartilhar anota
   - Service Workers
   - Web Storage API
 
-## Instalação e Execução
-
-### Pré-requisitos
-
-- Python 3.7 ou superior
-- pip (gerenciador de pacotes do Python)
-
-### Passos para instalação
-
-1. Clone ou baixe este repositório
-2. Navegue até a pasta do projeto
-3. Instale as dependências:
-
-```bash
-pip install -r requirements.txt
-```
-
-4. Execute o servidor:
-
-```bash
-python app.py
-```
-
-5. Acesse a aplicação em seu navegador:
-   - URL: [http://localhost:80](http://localhost:80)
-
-### Solução de problemas
-
-Se encontrar um erro relacionado ao `url_quote` ao iniciar o servidor:
-
-```text
-ImportError: cannot import name 'url_quote' from 'werkzeug.urls'
-```
-
-Significa que há um problema de compatibilidade com as versões do Flask e Werkzeug. Execute:
-
-```bash
-pip uninstall flask werkzeug
-pip install flask==2.0.1 werkzeug==2.0.1
-```
-
 ## Como usar
 
 1. **Autenticação**: Ao abrir o aplicativo, clique em "Autenticar" e siga as instruções de autenticação do seu dispositivo
@@ -79,7 +37,7 @@ pip install flask==2.0.1 werkzeug==2.0.1
 
 ## Tecnologias Utilizadas
 
-- HTML5, CSS3, JavaScript (ES6+)
+- HTML5, CSS3, JavaScript
 - Web Components e Shadow DOM para componentes reutilizáveis
 - Service Workers para funcionamento offline
 - Web Storage API para armazenamento local
@@ -87,7 +45,8 @@ pip install flask==2.0.1 werkzeug==2.0.1
   - Web Authentication API
   - Speech Recognition API
   - Web Share API
-- Flask e Waitress para servir a aplicação
+- Flask e Waitress para servir a aplicação no servidor
+- Python para backend (opcional, apenas para servir a aplicação)
 
 ## Estrutura do Projeto
 
@@ -96,7 +55,7 @@ pip install flask==2.0.1 werkzeug==2.0.1
 ├── index.html           # Página principal da aplicação
 ├── manifest.json        # Configuração da PWA
 ├── sw.js               # Service Worker para funcionalidade offline
-├── app.py              # Servidor Python usando Flask e Waitress
+├── app.py              # Servidor Python usando Flask e Waitress, usado para servir a aplicação no servidor
 ├── requirements.txt    # Dependências Python
 ├── css/
 │   └── style.css       # Estilos globais

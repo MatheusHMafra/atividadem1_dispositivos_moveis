@@ -26,17 +26,6 @@ class AuthManager {
             this.authButton.disabled = true;
         }
 
-        // Adicionar botão de bypass para desenvolvimento
-        if (this.bypassAuthBtn) {
-            this.bypassAuthBtn.addEventListener('click', () => {
-                localStorage.setItem('authState', 'authenticated');
-                this.isAuthenticated = true;
-                this.authSection.classList.add('hidden');
-                this.notesSection.classList.remove('hidden');
-            });
-        }
-
-        // Adicionar botão de logout
         this.logoutBtn?.addEventListener('click', () => this.logout());
 
         // Verifica se já está autenticado
@@ -63,7 +52,6 @@ class AuthManager {
         localStorage.removeItem('authExpiry');
         this.isAuthenticated = false;
         
-        // Animar a transição
         this.notesSection.style.opacity = '0';
         this.notesSection.style.transform = 'translateY(-20px)';
         
@@ -122,7 +110,7 @@ class AuthManager {
             const credential = await navigator.credentials.create(createOptions);
             
             if (credential) {
-                // Armazenar credencial (em um ambiente real, isso seria feito em um backend)
+                // Armazenar credencial
                 localStorage.setItem('authState', 'authenticated');
                 
                 // Definir expiração para 24h
@@ -131,12 +119,10 @@ class AuthManager {
                 localStorage.setItem('authExpiry', expiry.toISOString());
                 
                 this.isAuthenticated = true;
-                
-                // Mostrar feedback visual positivo
+
                 this.authButton.innerHTML = '<span>✅ Autenticado!</span>';
                 this.showStatus('Autenticação bem-sucedida!', 'success');
-                
-                // Transição suave para a seção de notas
+
                 setTimeout(() => this.switchToNotes(), 1000);
             }
         } catch (error) {
@@ -162,13 +148,11 @@ class AuthManager {
     showStatus(message, type) {
         if (!this.authStatus) return;
         
-        // Remover classes anteriores e adicionar as novas
         this.authStatus.className = 'status-message';
         if (type) {
             this.authStatus.classList.add(type);
         }
         
-        // Adicionar um ícone com base no tipo de mensagem
         let icon = '';
         switch (type) {
             case 'error': icon = '❌ '; break;
@@ -180,13 +164,11 @@ class AuthManager {
         this.authStatus.textContent = icon + message;
         this.authStatus.classList.remove('hidden');
         
-        // Animação para chamar atenção
         this.authStatus.style.animation = 'none';
         setTimeout(() => {
             this.authStatus.style.animation = 'fadeIn 0.5s ease-out';
         }, 10);
         
-        // Auto-ocultar mensagens de sucesso após 5 segundos
         if (type === 'success') {
             setTimeout(() => {
                 this.authStatus.style.animation = 'fadeOut 0.5s ease-out forwards';
@@ -231,7 +213,6 @@ style.textContent = `
 `;
 document.head.appendChild(style);
 
-// Inicializar o gerenciador de autenticação quando o DOM estiver pronto
 document.addEventListener('DOMContentLoaded', () => {
     const authManager = new AuthManager();
 });

@@ -2,26 +2,25 @@
 <html lang="pt-br">
 
 <head>
+    <!-- Meta -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="icon" href="image/icon.png" type="image/png">
     <title>Anotações Protegidas</title>
 
+    <!-- Manifest -->
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#4361ee">
-    <link rel="icon" href="image/icon.png" type="image/png">
     <link rel="apple-touch-icon" href="image/icon.png">
     <link rel="stylesheet" href="css/style.css">
-    <meta name="description" content="Aplicativo de anotações protegidas com autenticação biométrica, funcionamento offline e compartilhamento fácil">
+    <meta name="description" content="Aplicativo de anotações protegidas com autenticação.">
     
-    <!-- Preconectar para otimização -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    
-    <!-- Open Graph para melhor compartilhamento -->
+    <!-- Open Graph -->
     <meta property="og:title" content="Anotações Protegidas">
-    <meta property="og:description" content="Aplicativo web para anotações com proteção biométrica">
+    <meta property="og:description" content="Aplicativo web para anotações com autenticação.">
     <meta property="og:image" content="image/icon.png">
-    <meta property="og:url" content="https://anotacoes-protegidas.web.app">
+    <meta property="og:url" content="https://anotacoes.squareweb.app/">
     <meta property="og:type" content="website">
 </head>
 
@@ -39,13 +38,6 @@
                 <span>🔐 Autenticar</span>
             </button>
             <p id="auth-status" class="status-message hidden" aria-live="polite"></p>
-            
-            <!-- Modo de desenvolvimento -->
-            <div class="dev-options hidden">
-                <hr style="margin: 20px 0; border-color: rgba(128,128,128,0.2); border-style: dashed;">
-                <p><small>Opções de desenvolvimento:</small></p>
-                <button id="bypass-auth">Pular Autenticação</button>
-            </div>
         </div>
 
         <div id="notes-section" class="hidden">
@@ -58,11 +50,6 @@
         </div>
     </main>
 
-    <footer>
-        <p>PWA de Anotações Protegidas &copy; 2025</p>
-    </footer>
-
-    <!-- Scripts -->
     <script src="js/components.js" defer></script>
     <script src="js/auth.js" defer></script>
     <script src="js/app.js" defer></script>
@@ -79,11 +66,6 @@
                         console.log('Falha ao registrar o Service Worker:', error);
                     });
             });
-        }
-        
-        // Verificar se estamos em modo de desenvolvimento
-        if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
-            document.querySelector('.dev-options').classList.remove('hidden');
         }
     </script>
 </html>

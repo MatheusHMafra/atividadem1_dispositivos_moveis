@@ -66,7 +66,7 @@ class NoteEditor extends HTMLElement {
     constructor() {
         super();
         this.attachShadow({ mode: 'open' });
-        this._elements = {}; // Cache de elementos DOM
+        this._elements = {};
     }
 
     connectedCallback() {
@@ -257,7 +257,7 @@ class NoteEditor extends HTMLElement {
             <div id="status-message"></div>
         `;
         
-        // Cache de elementos DOM frequentemente acessados
+        // Cache de elementos DOM
         this._elements = {
             saveBtn: this.shadowRoot.getElementById('save-btn'),
             voiceBtn: this.shadowRoot.getElementById('voice-btn'),
@@ -269,13 +269,12 @@ class NoteEditor extends HTMLElement {
     }
 
     setupListeners() {
-        const { saveBtn, voiceBtn, clearBtn, titleInput, contentInput } = this._elements;
+        const { saveBtn, voiceBtn, clearBtn, contentInput } = this._elements;
 
         saveBtn.addEventListener('click', this.handleSave.bind(this));
         voiceBtn.addEventListener('click', this.handleVoiceRecognition.bind(this));
         clearBtn.addEventListener('click', this.handleClear.bind(this));
         
-        // Auto-resize para textarea com debounce
         contentInput.addEventListener('input', Utils.debounce((e) => {
             e.target.style.height = 'auto';
             e.target.style.height = (e.target.scrollHeight) + 'px';
@@ -307,13 +306,11 @@ class NoteEditor extends HTMLElement {
         try {
             NotesManager.saveNote(note);
 
-            // Adicionar efeito visual
             saveBtn.innerHTML = '<span class="icon">✅</span> Salvo!';
             setTimeout(() => {
                 saveBtn.innerHTML = '<span class="icon">💾</span> Salvar';
             }, 2000);
 
-            // Limpar campos
             titleInput.value = '';
             contentInput.value = '';
             contentInput.style.height = 'auto';
@@ -353,7 +350,6 @@ class NoteEditor extends HTMLElement {
             
             contentInput.value += ' ' + interimTranscript;
             
-            // Atualizar status enquanto fala
             this.showStatusMessage('Reconhecendo: ' + interimTranscript, 'success');
         };
 
@@ -395,7 +391,6 @@ class NoteEditor extends HTMLElement {
     handleClear() {
         const { titleInput, contentInput, statusMessage } = this._elements;
         
-        // Animação de limpeza
         titleInput.style.transition = "opacity 0.3s";
         contentInput.style.transition = "opacity 0.3s";
         
@@ -419,7 +414,6 @@ class NoteEditor extends HTMLElement {
         statusMessage.className = type;
         statusMessage.classList.add('visible');
         
-        // Auto-hide após 5 segundos para mensagens de sucesso
         if (type === 'success') {
             setTimeout(() => {
                 statusMessage.classList.remove('visible');
@@ -440,12 +434,10 @@ class NoteList extends HTMLElement {
         this.loadNotes();
         this.render();
         
-        // Adicionar listener para o evento notesUpdated
         document.addEventListener('notesUpdated', this.handleNotesUpdated.bind(this));
     }
     
     disconnectedCallback() {
-        // Remover listener ao desmontar componente para evitar vazamentos de memória
         document.removeEventListener('notesUpdated', this.handleNotesUpdated.bind(this));
     }
     
@@ -636,10 +628,8 @@ class NoteList extends HTMLElement {
     formatContent(content) {
         if (!content) return '<em>Sem conteúdo</em>';
         
-        // Escape HTML para prevenir XSS
         const escaped = Utils.escapeHTML(content);
         
-        // Converter URLs para links clicáveis
         return escaped.replace(
             /(https?:\/\/[^\s]+)/g, 
             '<a href="$1" target="_blank" rel="noopener noreferrer">$1</a>'
@@ -647,7 +637,6 @@ class NoteList extends HTMLElement {
     }
 
     setupListeners() {
-        // Event delegation para melhor performance
         const container = this.shadowRoot.getElementById('notes-container');
         
         if (!container) return;
@@ -675,7 +664,6 @@ class NoteList extends HTMLElement {
                 title: note.title,
                 text: note.content,
             }).then(() => {
-                // Mostrar feedback de sucesso
                 button.textContent = "Compartilhado!";
                 setTimeout(() => {
                     button.innerHTML = '<span class="icon">📤</span> Compartilhar';
@@ -689,9 +677,7 @@ class NoteList extends HTMLElement {
     }
     
     deleteNote(id, noteElement) {
-        // Confirmar exclusão
         if (confirm('Tem certeza que deseja excluir esta anotação?')) {
-            // Adicionar efeito visual antes de remover
             noteElement.style.opacity = '0';
             noteElement.style.transform = 'scale(0.9) translateY(-10px)';
             

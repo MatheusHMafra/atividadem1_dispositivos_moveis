@@ -46,7 +46,7 @@ self.addEventListener('fetch', (event) => {
                     return response;
                 }
 
-                // Clona a requisição pois só pode ser usada uma vez
+                // Clona a requisição
                 const fetchRequest = event.request.clone();
 
                 return fetch(fetchRequest)
@@ -56,7 +56,7 @@ self.addEventListener('fetch', (event) => {
                             return response;
                         }
 
-                        // Clona a resposta pois também só pode ser usada uma vez
+                        // Clona a resposta
                         const responseToCache = response.clone();
 
                         caches.open(CACHE_NAME)
