@@ -1,6 +1,7 @@
 # Aplicativo de Anotações Protegidas (PWA)
 
 Uma Aplicação Web Progressiva (PWA) para criar, armazenar e compartilhar anotações de forma segura, com autenticação biométrica.
+
 **[➡️ Como Usar](#como-usar)**
 
 ## Funcionalidades
@@ -24,7 +25,9 @@ Uma Aplicação Web Progressiva (PWA) para criar, armazenar e compartilhar anota
 
 ## Como usar
 
-Entre nesse [link](https://anotacoes.squareweb.app/) ou baixe o código fonte e execute localmente.
+Entre nesse [link](https://anotacoes.squareweb.app/) ou nesse [link](https://matheushmafra.github.io/atividadem1_dispositivos_moveis/)
+
+ou baixe o código fonte e execute localmente.
 
 1. **Autenticação**: Ao abrir o aplicativo, clique em "Autenticar" e siga as instruções de autenticação do seu dispositivo
 2. **Criar anotações**:
