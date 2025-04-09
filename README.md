@@ -61,7 +61,7 @@ ou baixe o código fonte e execute localmente.
 ├── index.html           # Página principal da aplicação
 ├── manifest.json        # Configuração da PWA
 ├── sw.js               # Service Worker para funcionalidade offline
-├── app.py              # Servidor Python usando Flask e Waitress, usado para servir a aplicação no servidor
+├── app.py              # Servidor Python usando Flask e Waitress, usado para servir a aplicação
 ├── requirements.txt    # Dependências Python
 ├── css/
 │   └── style.css       # Estilos globais
