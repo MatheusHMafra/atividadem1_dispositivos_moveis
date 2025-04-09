@@ -191,6 +191,7 @@ button.success-btn:hover {
 textarea,
 input {
     width: 100%;
+    max-width: 100%;
     padding: 15px;
     margin-bottom: 1rem;
     border: 1px solid rgba(128, 128, 128, 0.15);
