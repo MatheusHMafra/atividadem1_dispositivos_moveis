@@ -200,16 +200,6 @@ style.textContent = `
         0% { transform: rotate(0deg); }
         100% { transform: rotate(360deg); }
     }
-    
-    @keyframes fadeIn {
-        from { opacity: 0; transform: translateY(-10px); }
-        to { opacity: 1; transform: translateY(0); }
-    }
-    
-    @keyframes fadeOut {
-        from { opacity: 1; transform: translateY(0); }
-        to { opacity: 0; transform: translateY(-10px); }
-    }
 `;
 document.head.appendChild(style);
 

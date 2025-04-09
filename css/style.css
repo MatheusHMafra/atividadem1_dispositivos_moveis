@@ -45,12 +45,7 @@ main {
     flex: 1;
 }
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
+h1, h2, h3, h4, h5, h6 {
     margin-bottom: 1rem;
     font-weight: 600;
     line-height: 1.2;
@@ -72,6 +67,7 @@ h3 {
 p {
     margin-bottom: 1rem;
 }
+
 
 /* Elementos de UI */
 .note-item {
@@ -134,13 +130,6 @@ button:focus {
     box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.3);
 }
 
-button:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-    transform: none;
-    box-shadow: none;
-}
-
 button::after {
     content: '';
     position: absolute;
@@ -171,101 +160,9 @@ button:focus:not(:active)::after {
     }
 }
 
-button.danger-btn {
-    background-color: var(--danger-color);
-}
-
-button.danger-btn:hover {
-    background-color: rgba(231, 76, 60, 0.9);
-}
-
-button.success-btn {
-    background-color: var(--success-color);
-}
-
-button.success-btn:hover {
-    background-color: rgba(46, 204, 113, 0.9);
-}
-
-/* Campos de entrada */
-textarea,
-input {
-    width: 100%;
-    max-width: 100%;
-    padding: 15px;
-    margin-bottom: 1rem;
-    border: 1px solid rgba(128, 128, 128, 0.15);
-    border-radius: var(--border-radius);
-    background-color: rgba(255, 255, 255, 0.1);
-    color: var(--secondary-color);
-    font-family: inherit;
-    font-size: 1rem;
-    transition: all 0.3s ease;
-    box-sizing: border-box;
-    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
-}
-
-textarea:focus,
-input:focus {
-    outline: none;
-    border-color: var(--accent-color);
-    box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.2), inset 0 2px 4px rgba(0, 0, 0, 0.05);
-}
-
-.actions {
-    display: flex;
-    gap: 12px;
-    margin-top: 20px;
-    flex-wrap: wrap;
-}
-
-button:focus-visible,
-input:focus-visible,
-textarea:focus-visible {
+button:focus-visible {
     outline: 3px solid var(--accent-color);
     outline-offset: 2px;
-}
-
-/* Mensagens de status */
-.status-message {
-    padding: 15px 18px;
-    border-radius: var(--border-radius);
-    margin: 18px 0;
-    font-size: 1rem;
-    background-color: rgba(128, 128, 128, 0.08);
-    border-left: 4px solid #808080;
-    animation: slideIn 0.4s ease-in-out;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}
-
-@keyframes slideIn {
-    from {
-        opacity: 0;
-        transform: translateY(-15px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-.status-message.error {
-    background-color: rgba(231, 76, 60, 0.08);
-    color: var(--danger-color);
-    border-left: 4px solid var(--danger-color);
-}
-
-.status-message.success {
-    background-color: rgba(46, 204, 113, 0.08);
-    color: var(--success-color);
-    border-left: 4px solid var(--success-color);
-}
-
-.status-message.warning {
-    background-color: rgba(243, 156, 18, 0.08);
-    color: var(--warning-color);
-    border-left: 4px solid var(--warning-color);
 }
 
 /* Animações e transições */
@@ -464,14 +361,6 @@ footer {
         font-size: 1.5rem;
     }
 
-    .actions {
-        flex-direction: column;
-    }
-
-    button {
-        width: 100%;
-    }
-
     #auth-section {
         padding: 2rem 1.5rem;
         margin: 2rem auto;
@@ -487,13 +376,7 @@ footer {
         padding: 1rem;
     }
 
-    textarea,
-    input {
-        font-size: 16px;
-        padding: 12px;
-    }
-
-    .note-item {
+    #auth-section {
         padding: 1.2rem;
     }
 }

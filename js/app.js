@@ -1,9 +1,7 @@
 // Função principal da aplicação
 document.addEventListener('DOMContentLoaded', () => {
     checkFeatures();
-
     installPWA();
-
     loadPage();
 });
 

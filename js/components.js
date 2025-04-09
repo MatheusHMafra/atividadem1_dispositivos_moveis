@@ -102,6 +102,7 @@ class NoteEditor extends HTMLElement {
 
             textarea, input {
                 width: 100%;
+                max-width: 100%;
                 padding: 15px;
                 margin-bottom: 15px;
                 border: 1px solid rgba(128, 128, 128, 0.2);
