@@ -8,11 +8,11 @@
     --success-color: #81c784;
     --warning-color: #ffd54f;
     --border-radius: 10px;
-    --box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    --box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
     --transition-speed: 0.3s;
     --font-main: 'Segoe UI', Roboto, -apple-system, BlinkMacSystemFont, sans-serif;
     --card-bg: rgba(30, 30, 30, 0.8);
-    --card-shadow: 0 8px 16px rgba(0,0,0,0.3);
+    --card-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
 }
 
 /* Reset e estilos base */
@@ -45,16 +45,33 @@ main {
     flex: 1;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
     margin-bottom: 1rem;
     font-weight: 600;
     line-height: 1.2;
 }
 
-h1 { font-size: 2rem; }
-h2 { font-size: 1.75rem; color: var(--accent-color); }
-h3 { font-size: 1.5rem; }
-p { margin-bottom: 1rem; }
+h1 {
+    font-size: 2rem;
+}
+
+h2 {
+    font-size: 1.75rem;
+    color: var(--accent-color);
+}
+
+h3 {
+    font-size: 1.5rem;
+}
+
+p {
+    margin-bottom: 1rem;
+}
 
 /* Elementos de UI */
 .note-item {
@@ -71,7 +88,7 @@ p { margin-bottom: 1rem; }
 
 .note-item:hover {
     transform: translateY(-5px);
-    box-shadow: 0 12px 24px rgba(0,0,0,0.15);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
 }
 
 .note-item h3 {
@@ -92,7 +109,7 @@ button {
     font-size: 1rem;
     font-weight: 500;
     transition: all 0.2s ease;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     position: relative;
     overflow: hidden;
     display: inline-flex;
@@ -104,12 +121,12 @@ button {
 button:hover {
     background-color: var(--accent-hover);
     transform: translateY(-2px);
-    box-shadow: 0 6px 8px rgba(0,0,0,0.15);
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
 }
 
 button:active {
     transform: translateY(1px);
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 button:focus {
@@ -143,8 +160,15 @@ button:focus:not(:active)::after {
 }
 
 @keyframes ripple {
-    0% { transform: scale(0, 0); opacity: 0.5; }
-    100% { transform: scale(20, 20); opacity: 0; }
+    0% {
+        transform: scale(0, 0);
+        opacity: 0.5;
+    }
+
+    100% {
+        transform: scale(20, 20);
+        opacity: 0;
+    }
 }
 
 button.danger-btn {
@@ -164,7 +188,8 @@ button.success-btn:hover {
 }
 
 /* Campos de entrada */
-textarea, input {
+textarea,
+input {
     width: 100%;
     padding: 15px;
     margin-bottom: 1rem;
@@ -179,7 +204,8 @@ textarea, input {
     box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
-textarea:focus, input:focus {
+textarea:focus,
+input:focus {
     outline: none;
     border-color: var(--accent-color);
     box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.2), inset 0 2px 4px rgba(0, 0, 0, 0.05);
@@ -192,8 +218,8 @@ textarea:focus, input:focus {
     flex-wrap: wrap;
 }
 
-button:focus-visible, 
-input:focus-visible, 
+button:focus-visible,
+input:focus-visible,
 textarea:focus-visible {
     outline: 3px solid var(--accent-color);
     outline-offset: 2px;
@@ -212,8 +238,15 @@ textarea:focus-visible {
 }
 
 @keyframes slideIn {
-    from { opacity: 0; transform: translateY(-15px); }
-    to { opacity: 1; transform: translateY(0); }
+    from {
+        opacity: 0;
+        transform: translateY(-15px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .status-message.error {
@@ -244,13 +277,27 @@ textarea:focus-visible {
 }
 
 @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(-10px); }
-    to { opacity: 1; transform: translateY(0); }
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 @keyframes fadeOut {
-    from { opacity: 1; transform: translateY(0); }
-    to { opacity: 0; transform: translateY(-10px); }
+    from {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    to {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
 }
 
 .hidden {
@@ -284,13 +331,14 @@ textarea:focus-visible {
 }
 
 /* Header e Footer */
-header, footer {
+header,
+footer {
     width: 100%;
     background-color: var(--accent-color);
     color: white;
     padding: 1.2rem;
     text-align: center;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     position: relative;
 }
 
@@ -320,7 +368,7 @@ footer {
     z-index: 999;
     background-color: var(--accent-color);
     color: white;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.25);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.25);
     border-radius: 50%;
     width: 60px;
     height: 60px;
@@ -341,8 +389,15 @@ footer {
 }
 
 @keyframes pulse {
-    from { transform: scale(1); box-shadow: 0 5px 15px rgba(0,0,0,0.25); }
-    to { transform: scale(1.05); box-shadow: 0 8px 20px rgba(0,0,0,0.3); }
+    from {
+        transform: scale(1);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.25);
+    }
+
+    to {
+        transform: scale(1.05);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+    }
 }
 
 /* Botão de logout */
@@ -363,7 +418,7 @@ footer {
 
 /* Carregamento */
 .skeleton {
-    background: linear-gradient(90deg, var(--card-bg), rgba(255,255,255,0.1), var(--card-bg));
+    background: linear-gradient(90deg, var(--card-bg), rgba(255, 255, 255, 0.1), var(--card-bg));
     background-size: 200% 100%;
     animation: loading 1.5s infinite;
     border-radius: var(--border-radius);
@@ -372,8 +427,13 @@ footer {
 }
 
 @keyframes loading {
-    0% { background-position: -100% 0; }
-    100% { background-position: 200% 0; }
+    0% {
+        background-position: -100% 0;
+    }
+
+    100% {
+        background-position: 200% 0;
+    }
 }
 
 /* Notes header com actions */
@@ -394,18 +454,23 @@ footer {
     header h1 {
         font-size: 1.6rem;
     }
-    
-    h1 { font-size: 1.8rem; }
-    h2 { font-size: 1.5rem; }
-    
+
+    h1 {
+        font-size: 1.8rem;
+    }
+
+    h2 {
+        font-size: 1.5rem;
+    }
+
     .actions {
         flex-direction: column;
     }
-    
+
     button {
         width: 100%;
     }
-    
+
     #auth-section {
         padding: 2rem 1.5rem;
         margin: 2rem auto;
@@ -416,16 +481,17 @@ footer {
     header h1 {
         font-size: 1.4rem;
     }
-    
+
     main {
         padding: 1rem;
     }
-    
-    textarea, input {
+
+    textarea,
+    input {
         font-size: 16px;
         padding: 12px;
     }
-    
+
     .note-item {
         padding: 1.2rem;
     }

@@ -19,7 +19,7 @@ try:
         print("Para encerrar, pressione CTRL+C")
         print("="*80)
         serve(app, host='0.0.0.0', port=80)
-        
+
 except ImportError as e:
     print("="*80)
     print("ERRO DE IMPORTAÇÃO: ", str(e))

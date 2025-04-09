@@ -7,13 +7,13 @@ class AuthManager {
         this.notesSection = document.getElementById('notes-section');
         this.bypassAuthBtn = document.getElementById('bypass-auth');
         this.logoutBtn = document.getElementById('logout-btn');
-        
+
         this.isAuthenticated = false;
-        
+
         // Verifica se a WebAuthn é suportada
         if (window.PublicKeyCredential) {
             this.authButton.addEventListener('click', () => this.authenticate());
-            
+
             // Verificar se o browser suporta o tipo de autenticação
             PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable()
                 .then(available => {
@@ -51,22 +51,22 @@ class AuthManager {
         localStorage.removeItem('authState');
         localStorage.removeItem('authExpiry');
         this.isAuthenticated = false;
-        
+
         this.notesSection.style.opacity = '0';
         this.notesSection.style.transform = 'translateY(-20px)';
-        
+
         setTimeout(() => {
             this.notesSection.classList.add('hidden');
             this.authSection.classList.remove('hidden');
             this.authSection.style.opacity = '0';
             this.authSection.style.transform = 'translateY(20px)';
-            
+
             setTimeout(() => {
                 this.authSection.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
                 this.authSection.style.opacity = '1';
                 this.authSection.style.transform = 'translateY(0)';
             }, 50);
-            
+
             this.logoutBtn?.classList.add('hidden');
             this.showStatus('Você saiu com sucesso.', 'success');
         }, 300);
@@ -77,11 +77,11 @@ class AuthManager {
             this.showStatus('Iniciando autenticação...', 'info');
             this.authButton.disabled = true;
             this.authButton.innerHTML = '<span class="loading-spinner"></span> Autenticando...';
-            
+
             // Gerar desafio aleatório
             const challenge = new Uint8Array(32);
             window.crypto.getRandomValues(challenge);
-            
+
             // Criar opções para a criação de credenciais
             const createOptions = {
                 publicKey: {
@@ -105,19 +105,19 @@ class AuthManager {
                     }
                 }
             };
-            
+
             // Criar credencial
             const credential = await navigator.credentials.create(createOptions);
-            
+
             if (credential) {
                 // Armazenar credencial
                 localStorage.setItem('authState', 'authenticated');
-                
+
                 // Definir expiração para 24h
                 const expiry = new Date();
                 expiry.setHours(expiry.getHours() + 24);
                 localStorage.setItem('authExpiry', expiry.toISOString());
-                
+
                 this.isAuthenticated = true;
 
                 this.authButton.innerHTML = '<span>✅ Autenticado!</span>';
@@ -127,7 +127,7 @@ class AuthManager {
             }
         } catch (error) {
             console.error('Erro de autenticação:', error);
-            
+
             // Tratar diferentes tipos de erros
             if (error.name === 'NotAllowedError') {
                 this.showStatus('Autenticação cancelada pelo usuário.', 'warning');
@@ -138,21 +138,21 @@ class AuthManager {
             } else {
                 this.showStatus(`Erro de autenticação: ${error.message}`, 'error');
             }
-            
+
             this.authButton.innerHTML = '<span>🔐 Autenticar</span>';
         } finally {
             this.authButton.disabled = false;
         }
     }
-    
+
     showStatus(message, type) {
         if (!this.authStatus) return;
-        
+
         this.authStatus.className = 'status-message';
         if (type) {
             this.authStatus.classList.add(type);
         }
-        
+
         let icon = '';
         switch (type) {
             case 'error': icon = '❌ '; break;
@@ -160,15 +160,15 @@ class AuthManager {
             case 'warning': icon = '⚠️ '; break;
             case 'info': icon = 'ℹ️ '; break;
         }
-        
+
         this.authStatus.textContent = icon + message;
         this.authStatus.classList.remove('hidden');
-        
+
         this.authStatus.style.animation = 'none';
         setTimeout(() => {
             this.authStatus.style.animation = 'fadeIn 0.5s ease-out';
         }, 10);
-        
+
         if (type === 'success') {
             setTimeout(() => {
                 this.authStatus.style.animation = 'fadeOut 0.5s ease-out forwards';

@@ -1,24 +1,24 @@
 // Utilitários compartilhados
 const Utils = {
     formatDate(dateString) {
-        const dateOptions = { 
-            year: 'numeric', 
-            month: 'short', 
+        const dateOptions = {
+            year: 'numeric',
+            month: 'short',
             day: 'numeric',
             hour: '2-digit',
             minute: '2-digit'
         };
         return new Date(dateString).toLocaleDateString('pt-BR', dateOptions);
     },
-    
+
     debounce(func, delay = 300) {
         let timer;
-        return function(...args) {
+        return function (...args) {
             clearTimeout(timer);
             timer = setTimeout(() => func.apply(this, args), delay);
         };
     },
-    
+
     escapeHTML(text) {
         if (!text) return '';
         return text
@@ -40,7 +40,7 @@ const NotesManager = {
             return [];
         }
     },
-    
+
     saveNote(note) {
         const notes = this.getAllNotes();
         notes.push(note);
@@ -48,14 +48,14 @@ const NotesManager = {
         this.notifyUpdate();
         return note;
     },
-    
+
     deleteNote(id) {
         const notes = this.getAllNotes();
         const updatedNotes = notes.filter(note => note.id !== id);
         localStorage.setItem('notes', JSON.stringify(updatedNotes));
         this.notifyUpdate();
     },
-    
+
     notifyUpdate() {
         document.dispatchEvent(new CustomEvent('notesUpdated'));
     }
@@ -73,7 +73,7 @@ class NoteEditor extends HTMLElement {
         this.render();
         this.setupListeners();
     }
-    
+
     getStyles() {
         return `
             :host {
@@ -256,7 +256,7 @@ class NoteEditor extends HTMLElement {
             </div>
             <div id="status-message"></div>
         `;
-        
+
         // Cache de elementos DOM
         this._elements = {
             saveBtn: this.shadowRoot.getElementById('save-btn'),
@@ -274,22 +274,22 @@ class NoteEditor extends HTMLElement {
         saveBtn.addEventListener('click', this.handleSave.bind(this));
         voiceBtn.addEventListener('click', this.handleVoiceRecognition.bind(this));
         clearBtn.addEventListener('click', this.handleClear.bind(this));
-        
+
         contentInput.addEventListener('input', Utils.debounce((e) => {
             e.target.style.height = 'auto';
             e.target.style.height = (e.target.scrollHeight) + 'px';
         }, 100));
     }
-    
+
     handleSave() {
         const { saveBtn, titleInput, contentInput } = this._elements;
-        
+
         if (!titleInput.value.trim()) {
             this.showStatusMessage('O título não pode estar vazio.', 'error');
             titleInput.focus();
             return;
         }
-        
+
         if (!contentInput.value.trim()) {
             this.showStatusMessage('O conteúdo da anotação não pode estar vazio.', 'error');
             contentInput.focus();
@@ -314,17 +314,17 @@ class NoteEditor extends HTMLElement {
             titleInput.value = '';
             contentInput.value = '';
             contentInput.style.height = 'auto';
-            
+
             this.showStatusMessage('Anotação salva com sucesso!', 'success');
         } catch (error) {
             console.error('Erro ao salvar nota:', error);
             this.showStatusMessage('Erro ao salvar a anotação. Tente novamente.', 'error');
         }
     }
-    
+
     handleVoiceRecognition() {
         const { voiceBtn, contentInput } = this._elements;
-        
+
         if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
             this.showStatusMessage('Reconhecimento de voz não suportado neste navegador.', 'error');
             return;
@@ -347,15 +347,15 @@ class NoteEditor extends HTMLElement {
             const interimTranscript = Array.from(event.results)
                 .map(result => result[0].transcript)
                 .join('');
-            
+
             contentInput.value += ' ' + interimTranscript;
-            
+
             this.showStatusMessage('Reconhecendo: ' + interimTranscript, 'success');
         };
 
         recognition.onerror = (event) => {
             console.error('Erro de reconhecimento:', event.error);
-            
+
             if (event.error === 'not-allowed') {
                 this.showStatusMessage('Permissão de microfone negada. Verifique as configurações do seu navegador.', 'error');
             } else if (event.error === 'no-speech') {
@@ -363,7 +363,7 @@ class NoteEditor extends HTMLElement {
             } else {
                 this.showStatusMessage(`Erro: ${event.error}`, 'error');
             }
-            
+
             this.resetVoiceButton();
         };
 
@@ -380,23 +380,23 @@ class NoteEditor extends HTMLElement {
             this.resetVoiceButton();
         }
     }
-    
+
     resetVoiceButton() {
         const { voiceBtn } = this._elements;
         voiceBtn.disabled = false;
         voiceBtn.innerHTML = '<span class="icon">🎤</span> Usar Voz';
         voiceBtn.classList.remove('listening');
     }
-    
+
     handleClear() {
         const { titleInput, contentInput, statusMessage } = this._elements;
-        
+
         titleInput.style.transition = "opacity 0.3s";
         contentInput.style.transition = "opacity 0.3s";
-        
+
         titleInput.style.opacity = "0.5";
         contentInput.style.opacity = "0.5";
-        
+
         setTimeout(() => {
             titleInput.value = '';
             contentInput.value = '';
@@ -413,7 +413,7 @@ class NoteEditor extends HTMLElement {
         statusMessage.textContent = message;
         statusMessage.className = type;
         statusMessage.classList.add('visible');
-        
+
         if (type === 'success') {
             setTimeout(() => {
                 statusMessage.classList.remove('visible');
@@ -433,14 +433,14 @@ class NoteList extends HTMLElement {
     connectedCallback() {
         this.loadNotes();
         this.render();
-        
+
         document.addEventListener('notesUpdated', this.handleNotesUpdated.bind(this));
     }
-    
+
     disconnectedCallback() {
         document.removeEventListener('notesUpdated', this.handleNotesUpdated.bind(this));
     }
-    
+
     handleNotesUpdated() {
         this.loadNotes();
         this.render();
@@ -451,7 +451,7 @@ class NoteList extends HTMLElement {
         // Organizar notas por data (mais recentes primeiro)
         this.notes.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
     }
-    
+
     getStyles() {
         return `
             :host {
@@ -585,7 +585,7 @@ class NoteList extends HTMLElement {
             }
         `;
     }
-    
+
     getEmptyState() {
         return `
             <div class="empty-state">
@@ -594,10 +594,10 @@ class NoteList extends HTMLElement {
                 <p class="empty-hint">Crie sua primeira anotação usando o formulário acima.</p>
             </div>`;
     }
-    
+
     getNoteHTML(note) {
         const formattedDate = Utils.formatDate(note.createdAt);
-        
+
         return `
             <div class="note-item" data-id="${note.id}">
                 <h3>${Utils.escapeHTML(note.title)}</h3>
@@ -612,8 +612,8 @@ class NoteList extends HTMLElement {
     }
 
     render() {
-        let notesHTML = this.notes.length === 0 
-            ? this.getEmptyState() 
+        let notesHTML = this.notes.length === 0
+            ? this.getEmptyState()
             : this.notes.map(note => this.getNoteHTML(note)).join('');
 
         this.shadowRoot.innerHTML = `
@@ -627,26 +627,26 @@ class NoteList extends HTMLElement {
 
     formatContent(content) {
         if (!content) return '<em>Sem conteúdo</em>';
-        
+
         const escaped = Utils.escapeHTML(content);
-        
+
         return escaped.replace(
-            /(https?:\/\/[^\s]+)/g, 
+            /(https?:\/\/[^\s]+)/g,
             '<a href="$1" target="_blank" rel="noopener noreferrer">$1</a>'
         );
     }
 
     setupListeners() {
         const container = this.shadowRoot.getElementById('notes-container');
-        
+
         if (!container) return;
-        
+
         container.addEventListener('click', (e) => {
             const target = e.target.closest('button');
             if (!target) return;
-            
+
             const noteId = parseInt(target.dataset.id);
-            
+
             if (target.classList.contains('share-btn')) {
                 this.shareNote(noteId, target);
             } else if (target.classList.contains('delete-btn')) {
@@ -654,11 +654,11 @@ class NoteList extends HTMLElement {
             }
         });
     }
-    
+
     shareNote(id, button) {
         const note = this.notes.find(n => n.id === id);
         if (!note) return;
-        
+
         if (navigator.share) {
             navigator.share({
                 title: note.title,
@@ -675,12 +675,12 @@ class NoteList extends HTMLElement {
             alert('Compartilhamento não suportado neste navegador.');
         }
     }
-    
+
     deleteNote(id, noteElement) {
         if (confirm('Tem certeza que deseja excluir esta anotação?')) {
             noteElement.style.opacity = '0';
             noteElement.style.transform = 'scale(0.9) translateY(-10px)';
-            
+
             setTimeout(() => {
                 NotesManager.deleteNote(id);
             }, 300);
